@@ -6,7 +6,6 @@ import Modal from './Modal';
 import Searchbar from './Searchbar';
 import Api from 'services/serviceApi';
 import ErrorMessage from './ErrorMessage';
-// import { ToastContainer } from 'react-toastify';
 
 const Status = {
   IDLE: 'idle',
@@ -24,6 +23,7 @@ export class App extends Component {
     error: '',
     bigImage: '',
     showModal: false,
+    totalHits: 1,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -57,6 +57,7 @@ export class App extends Component {
       .then(data => {
         this.setState(prevState => {
           return {
+            totalHits: data.totalHits,
             prevState,
             images: [...prevState.images, ...data.hits],
             status: Status.RESOLVED,
@@ -110,7 +111,7 @@ export class App extends Component {
           {this.state.showModal && (
             <Modal onClickModal={this.toggleModal} image={bigImage} />
           )}
-          {this.state.images.length !== 0 && (
+          {this.state.images.length !==this.state.totalHits && (
             <Button onClick={this.handleLoadMore} />
           )}
         </div>
@@ -119,28 +120,3 @@ export class App extends Component {
   }
 }
 
-// {/* <ImageGallery
-//       images={images}
-//       toggleModal={largeImageURL => this.toggleModal(largeImageURL)}
-//     />} */}
-// <Searchbar onSubmit={this.handleFormSubmit} />
-// <ImageGallery
-//   images={images}
-//   toggleModal={largeImageURL => this.toggleModal(largeImageURL)}
-// />
-
-// {
-//   this.state.images.length !== 0 && (
-//     <Button onClick={() => this.handleLoadMore()} />)
-// }
-// {this.state.status === Status.PENDING && <Loader />}
-// {
-//   this.state.showModal && (
-//     <Modal
-//       onClick={() => {
-//         this.toggleModal();
-//       }}
-//       image={bigImage}
-//       closeModal={this.closeModal}
-//     />)
-// }
